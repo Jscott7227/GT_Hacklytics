@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PulseSearch | Spotify Song Finder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Syne:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="bg-orb bg-orb-a"></div>
+    <div class="bg-orb bg-orb-b"></div>
+
+    <main class="page">
+      <section class="hero">
+        <p class="eyebrow">Spotify Discovery</p>
+        <h1>Find your next obsession in one search.</h1>
+        <p class="subtitle">
+          Start with any song title, artist, or mood and instantly pull tracks from Spotify.
+        </p>
+
+        <form id="searchForm" class="search-shell" autocomplete="off">
+          <label for="query" class="sr-only">Search songs</label>
+          <input
+            id="query"
+            name="query"
+            type="text"
+            placeholder="Type in a song"
+            required
+          />
+          <button type="submit">Search</button>
+        </form>
+        <p id="status" class="status" aria-live="polite"></p>
+      </section>
+
+      <section class="experience">
+        <section id="suggestions" class="suggestions" aria-live="polite"></section>
+        <section id="lyricsPanel" class="lyrics-card" aria-live="polite">
+          <h2 id="lyricsTitle">Select a song</h2>
+          <p id="lyricsArtist" class="lyrics-artist">Click any search result to load lyrics.</p>
+          <a id="lyricsSpotifyLink" class="open-link" target="_blank" rel="noopener noreferrer" hidden>
+            Open in Spotify
+          </a>
+          <pre id="lyricsBody" class="lyrics-body">Lyrics will appear here.</pre>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

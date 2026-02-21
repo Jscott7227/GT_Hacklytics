@@ -61,3 +61,32 @@ export async function getTrackById(trackId) {
 
   return response.json();
 }
+
+export async function searchTracks(query, limit = 8) {
+  if (!query || !query.trim()) {
+    return [];
+  }
+
+  const safeLimit = Math.min(Math.max(Number(limit) || 8, 1), 20);
+  const token = await fetchAccessToken();
+  const params = new URLSearchParams({
+    q: query.trim(),
+    type: "track",
+    limit: String(safeLimit),
+    market: "US",
+  });
+
+  const response = await fetch(`${API_BASE}/search?${params.toString()}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Spotify search request failed (${response.status}): ${text}`);
+  }
+
+  const data = await response.json();
+  return data?.tracks?.items ?? [];
+}

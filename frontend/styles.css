@@ -1,0 +1,281 @@
+:root {
+  --bg: #09131b;
+  --panel: rgba(10, 25, 36, 0.78);
+  --text: #ecf7ff;
+  --muted: #b3c8d9;
+  --accent: #00d4a6;
+  --accent-2: #ff8f52;
+  --line: rgba(199, 226, 247, 0.2);
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Space Grotesk", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 8% 12%, #1f3f59 0%, transparent 38%),
+    radial-gradient(circle at 90% 14%, #6a2b1d 0%, transparent 38%),
+    linear-gradient(145deg, #081018 0%, #061f2f 55%, #041923 100%);
+  overflow-x: hidden;
+}
+
+.bg-orb {
+  position: fixed;
+  width: 42vw;
+  height: 42vw;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.28;
+  pointer-events: none;
+}
+
+.bg-orb-a {
+  background: #00d4a6;
+  top: -18vw;
+  right: -12vw;
+}
+
+.bg-orb-b {
+  background: #ff8f52;
+  bottom: -20vw;
+  left: -14vw;
+}
+
+.page {
+  width: min(1050px, 92vw);
+  margin: 0 auto;
+  padding: 5rem 0 4rem;
+}
+
+.hero {
+  text-align: center;
+  animation: rise 0.6s ease-out both;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--accent);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+h1 {
+  margin: 1rem auto;
+  max-width: 16ch;
+  font-family: "Syne", sans-serif;
+  font-size: clamp(2rem, 6.8vw, 4.6rem);
+  line-height: 1.03;
+}
+
+.subtitle {
+  margin: 0 auto 1.8rem;
+  max-width: 52ch;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.search-shell {
+  margin: 0 auto;
+  width: min(760px, 100%);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  padding: 0.48rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.search-shell input {
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 1.02rem;
+  padding: 0.9rem 1.2rem;
+  outline: none;
+}
+
+.search-shell input::placeholder {
+  color: #9db7ca;
+}
+
+.search-shell button {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), #6be7ca);
+  color: #04221a;
+  font-weight: 800;
+  padding: 0 1.5rem;
+  cursor: pointer;
+}
+
+.status {
+  min-height: 1.4rem;
+  margin-top: 0.8rem;
+  color: var(--muted);
+}
+
+.experience {
+  margin-top: 1.2rem;
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) minmax(320px, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.suggestions {
+  width: 100%;
+  margin: 0;
+}
+
+.suggestion-list {
+  display: grid;
+  gap: 0.5rem;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.suggestion-item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 0.7rem;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--text);
+  text-align: left;
+  padding: 0.42rem;
+  cursor: pointer;
+  transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+
+.suggestion-item:hover {
+  transform: translateY(-1px);
+  border-color: rgba(107, 231, 202, 0.6);
+}
+
+.suggestion-item.is-active {
+  border-color: rgba(107, 231, 202, 0.95);
+  background: rgba(0, 212, 166, 0.12);
+}
+
+.suggestion-cover {
+  width: 54px;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.suggestion-meta {
+  min-width: 0;
+}
+
+.suggestion-title {
+  margin: 0;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.suggestion-sub {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.open-link {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.lyrics-card {
+  width: 100%;
+  min-height: 260px;
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(7, 23, 33, 0.84);
+  padding: 1.2rem;
+  box-shadow: var(--shadow);
+}
+
+#lyricsTitle {
+  margin: 0;
+  font-family: "Syne", sans-serif;
+  font-size: 1.35rem;
+}
+
+.lyrics-artist {
+  margin: 0.4rem 0 0.65rem;
+  color: var(--muted);
+}
+
+.lyrics-body {
+  margin: 0.7rem 0 0;
+  border-top: 1px solid var(--line);
+  padding-top: 0.7rem;
+  color: #d8ecf8;
+  white-space: pre-wrap;
+  font-family: "Space Grotesk", sans-serif;
+  line-height: 1.5;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding-top: 3.2rem;
+  }
+
+  .search-shell {
+    grid-template-columns: 1fr;
+    border-radius: 24px;
+  }
+
+  .search-shell button {
+    min-height: 48px;
+  }
+
+  .experience {
+    grid-template-columns: 1fr;
+  }
+
+  .lyrics-card {
+    max-height: 360px;
+  }
+}
