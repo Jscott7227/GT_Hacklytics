@@ -6,6 +6,8 @@ const lyricsTitleEl = document.getElementById("lyricsTitle");
 const lyricsArtistEl = document.getElementById("lyricsArtist");
 const lyricsBodyEl = document.getElementById("lyricsBody");
 const lyricsSpotifyLinkEl = document.getElementById("lyricsSpotifyLink");
+const emotionsSectionEl = document.getElementById("emotionsSection");
+const emotionBarsEl = document.getElementById("emotionBars");
 
 let debounceTimer = null;
 let searchRequestId = 0;
@@ -39,6 +41,55 @@ function setLyricsPanel({ title, artist, lyrics, spotifyUrl }) {
   } else {
     lyricsSpotifyLinkEl.hidden = true;
   }
+}
+
+function clearEmotions() {
+  emotionsSectionEl.hidden = true;
+  emotionBarsEl.innerHTML = "";
+}
+
+function renderEmotions(emotions) {
+  if (!emotions || !emotions.length) {
+    clearEmotions();
+    return;
+  }
+
+  emotionBarsEl.innerHTML = "";
+  emotions.slice(0, 6).forEach(({ label, score }) => {
+    const row = document.createElement("div");
+    row.className = "emotion-row";
+
+    const labelEl = document.createElement("span");
+    labelEl.className = "emotion-label";
+    labelEl.textContent = label;
+
+    const track = document.createElement("div");
+    track.className = "emotion-track";
+    const fill = document.createElement("div");
+    fill.className = "emotion-fill";
+    fill.style.width = `${Math.round(score * 100)}%`;
+    track.append(fill);
+
+    const scoreEl = document.createElement("span");
+    scoreEl.className = "emotion-score";
+    scoreEl.textContent = `${Math.round(score * 100)}%`;
+
+    row.append(labelEl, track, scoreEl);
+    emotionBarsEl.append(row);
+  });
+
+  emotionsSectionEl.hidden = false;
+}
+
+async function loadEmotions(artist, title, lyrics) {
+  const res = await fetch("/api/analyze", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ artist, title, lyrics }),
+  });
+  if (!res.ok) return null;
+  const data = await res.json();
+  return data.emotions || null;
 }
 
 async function loadLyrics(artist, title) {
@@ -99,15 +150,22 @@ async function selectTrack(track) {
     lyrics: "Loading lyrics...",
     spotifyUrl: track.spotifyUrl,
   });
+  clearEmotions();
 
   try {
     const lyrics = await loadLyrics(artist, track.name);
+    const lyricsText = lyrics || "Lyrics unavailable for this track.";
     setLyricsPanel({
       title: track.name,
       artist,
-      lyrics: lyrics || "Lyrics unavailable for this track.",
+      lyrics: lyricsText,
       spotifyUrl: track.spotifyUrl,
     });
+
+    if (lyrics) {
+      const emotions = await loadEmotions(artist, track.name, lyrics);
+      renderEmotions(emotions);
+    }
   } catch (error) {
     setLyricsPanel({
       title: track.name,
@@ -207,6 +265,7 @@ queryInput.addEventListener("input", () => {
       lyrics: "Lyrics will appear here.",
       spotifyUrl: "",
     });
+    clearEmotions();
     return;
   }
 

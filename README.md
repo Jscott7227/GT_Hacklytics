@@ -8,8 +8,8 @@ Full-stack web app for searching Spotify tracks and viewing lyrics, with planned
 GT_Hacklytics/
 ├── backend/          # Node.js + Express API server
 │   ├── src/
-│   │   ├── routes/   # Route handlers (spotify, lyrics)
-│   │   ├── services/ # External API integrations (Spotify, lyrics providers)
+│   │   ├── routes/   # spotify, lyrics, analyze
+│   │   ├── services/ # Spotify, lyrics providers, ML service client
 │   │   └── server.js
 │   ├── package.json
 │   └── .env.example
@@ -17,8 +17,14 @@ GT_Hacklytics/
 │   ├── index.html
 │   ├── styles.css
 │   └── app.js
-├── notebooks/        # Jupyter notebooks — sentiment analysis & theme categorization
-├── db/               # Database schema, migrations, seeds
+├── ml/               # Python ML service
+│   ├── main.py           # FastAPI app  →  POST /analyze
+│   ├── classifier.py     # go_emotions emotion classification
+│   ├── embedder.py       # lyric embeddings + similarity search
+│   ├── requirements.txt
+│   └── notebooks/
+│       └── emotion_analysis.ipynb  # fine-tuning notebook (Databricks)
+├── db/               # Database (Firestore — handled separately)
 └── .env              # Root env file (shared across services)
 ```
 
@@ -87,7 +93,19 @@ Replace them with any song/artist/track you want to query.
 - Lyrics are requested through a provider fallback chain (`lrclib.net`, then `lyrics.ovh`).
 - Some tracks may not return lyrics depending on provider coverage.
 
-## Planned additions
+## Running the ML service
 
-- **`db/`** — database for storing tracks, lyrics, and analysis results
-- **`notebooks/`** — Jupyter notebooks for sentiment analysis and theme categorization of lyrics
+```bash
+cd ml
+pip install -r requirements.txt
+python main.py
+# Runs on http://localhost:8000
+```
+
+Add `ML_SERVICE_URL=http://localhost:8000` to your `.env` (already in `.env.example`).
+
+The service exposes:
+- `GET  /health`         — health check
+- `POST /analyze`        — `{ artist, title, lyrics }` → `{ emotions, embedding }`
+
+Run the fine-tuning notebook in `ml/notebooks/` on Databricks first to produce `go_emotions_model/`. Without it the service falls back to the pre-trained `SamLowe/roberta-base-go_emotions` model.

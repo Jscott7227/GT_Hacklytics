@@ -4,8 +4,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import spotifyRouter from "./routes/spotify.js";
 import lyricsRouter from "./routes/lyrics.js";
+import analyzeRouter from "./routes/analyze.js";
 
 const app = express();
+app.use(express.json());
 const port = Number(process.env.PORT || 3000);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,6 +27,7 @@ app.get("/health", (_req, res) => {
 
 app.use("/api/spotify", spotifyRouter);
 app.use("/api/lyrics", lyricsRouter);
+app.use("/api/analyze", analyzeRouter);
 
 app.get("/", (_req, res) => {
   if (!staticDir) {
